@@ -1,0 +1,40 @@
+[project]
+name = "file_uploader"
+version = "0.1.0"
+description = "HTTP API для загрузки файлов в файловую систему"
+requires-python = ">=3.13"
+dependencies = [
+    "aiofiles>=25.1.0",
+    "coloredlogs>=15.0.1",
+    "fastapi>=0.128.0",
+    "pydantic>=2.12.5",
+    "pydantic-settings>=2.12.0",
+    "python-json-logger>=4.0.0",
+    "python-multipart>=0.0.22",
+    "uvicorn[standard]>=0.40.0",
+]
+
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.5.0",
+    "ruff>=0.14.7",
+]
+
+[tool.ruff]
+src = ["src"]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]
+ignore = ["RUF001", "RUF002", "RUF003"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/**/*" = ["S101"]
+"**/tests_core/**/*" = ["S101"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
