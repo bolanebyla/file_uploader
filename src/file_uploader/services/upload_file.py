@@ -9,7 +9,7 @@ import aiofiles
 from fastapi import UploadFile
 
 
-@dataclass
+@dataclass(kw_only=True, slots=True)
 class UploadedFileDownloadUrls:
     original_file_url: str
     new_file_url: str
@@ -52,12 +52,12 @@ class UploadFileService:
             aiofiles.open(file_path / new_file_name, "wb") as new_file,
         ):
             while True:
-                line = await file.read(self._chunk_size_bytes)
-                if not line:
+                chunk = await file.read(self._chunk_size_bytes)
+                if not chunk:
                     break
 
-                await original_file.write(line)
-                await new_file.write(line)
+                await original_file.write(chunk)
+                await new_file.write(chunk)
 
         return UploadedFileDownloadUrls(
             original_file_url=f"{parend_dir_name}/{file_id}/{original_file_name}",

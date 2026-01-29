@@ -4,7 +4,7 @@ from typing import Annotated
 from fastapi import Depends, Request
 
 from file_uploader.http_api.settings import HttpApiSettings
-from file_uploader.services import UploadFileService
+from file_uploader.services import DownloadFileService, UploadFileService
 
 
 def get_api_settings(request: Request) -> HttpApiSettings:
@@ -15,3 +15,9 @@ def create_upload_file_service(
     api_settings: Annotated[HttpApiSettings, Depends(get_api_settings)],
 ) -> UploadFileService:
     return UploadFileService(files_dir=Path(api_settings.FILES_DIR))
+
+
+def create_download_file_service(
+    api_settings: Annotated[HttpApiSettings, Depends(get_api_settings)],
+) -> DownloadFileService:
+    return DownloadFileService(files_dir=Path(api_settings.FILES_DIR))
