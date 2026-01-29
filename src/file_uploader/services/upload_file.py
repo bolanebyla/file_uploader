@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -75,5 +76,4 @@ class UploadFileService:
         return file_path
 
     async def _create_file_dir(self, file_path: Path) -> None:
-        # TODO: асинхронно
-        file_path.mkdir(parents=True, exist_ok=True)
+        await asyncio.to_thread(file_path.mkdir, parents=True, exist_ok=True)

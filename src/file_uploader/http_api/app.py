@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
@@ -24,15 +25,18 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
 
     api_settings: HttpApiSettings = app.state.api_settings
 
-    # TODO: делать асинхронно
-    files_dir = Path(api_settings.FILES_DIR)
-    files_dir.mkdir(parents=True, exist_ok=True)
+    await _create_files_dir(api_settings=api_settings)
 
     logger.info("Lifespan загружен")
     yield
     logger.info("Выполняется очистка lifespan...")
 
     logger.info("Очистка lifespan завершена")
+
+
+async def _create_files_dir(api_settings: HttpApiSettings) -> None:
+    files_dir = Path(api_settings.FILES_DIR)
+    await asyncio.to_thread(files_dir.mkdir, parents=True, exist_ok=True)
 
 
 def create_app(api_settings: HttpApiSettings) -> FastAPI:
